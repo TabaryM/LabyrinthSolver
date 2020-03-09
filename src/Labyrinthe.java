@@ -1,17 +1,10 @@
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import labyrinthe.modele.Laby;
-import labyrinthe.modele.Point;
-
-import java.io.IOException;
+import labyrinthe.modele.points.Point;
 
 public class Labyrinthe /*extends Application*/ {
 
     public static void main(String[] args) {
-        Laby laby = new Laby(new Point(10,10));
+        Laby laby = new Laby(10,10);
         System.out.println(laby);
         //launch(args);
 

@@ -1,4 +1,4 @@
-package labyrinthe.modele;
+package labyrinthe.modele.points;
 
 public class Murnt extends Point {
     /**
