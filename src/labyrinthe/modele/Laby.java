@@ -8,15 +8,19 @@ public class Laby {
     private Point sortie;
     private Point dimension;
 
-    private ArrayList<Point> murs;
+    private ArrayList<ArrayList<Point>> carte;
 
     /**
      *
      * @param dimension
      */
     public Laby(Point dimension){
-        murs = new ArrayList<>();
+        carte = new ArrayList<>();
         this.dimension = dimension;
+        for(int i = 0; i < dimension.getY(); i++){
+            carte.add(new ArrayList<>());
+        }
+        generateLaby();
     }
 
     /**
@@ -29,18 +33,18 @@ public class Laby {
 
     /**
      *
-     * @param entree
-     */
-    public void setEntree(Point entree) {
-        this.entree = entree;
-    }
-
-    /**
-     *
      * @return
      */
     public Point getSortie() {
         return sortie;
+    }
+
+    /**
+     *
+     * @param entree
+     */
+    public void setEntree(Point entree) {
+        this.entree = entree;
     }
 
     /**
@@ -70,7 +74,27 @@ public class Laby {
     /**
      * Genere un labyrinthe moche
      */
-    public void generateLaby(){
+    private void generateLaby(){
+        for(int i = 0; i < dimension.getY(); i++) {
+            for (int j = 0; j < dimension.getX(); j++) {
+                if (Math.random() > 0.666) {
+                    carte.get(j).add(new Mur(j, i));
+                }else{
+                    carte.get(j).add(new Murnt(j, i));
+                }
+            }
+        }
+    }
 
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(ArrayList<Point> ligne : carte){
+            for(Point col : ligne){
+                stringBuilder.append(col.getDessin());
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 }

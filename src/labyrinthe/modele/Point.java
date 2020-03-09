@@ -18,4 +18,8 @@ public class Point {
         return y;
     }
 
+    public String getDessin(){
+        return null;
+    }
+
 }
