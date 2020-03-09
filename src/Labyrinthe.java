@@ -1,5 +1,4 @@
 import labyrinthe.modele.Laby;
-import labyrinthe.modele.points.Point;
 
 public class Labyrinthe /*extends Application*/ {
 
