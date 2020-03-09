@@ -89,12 +89,18 @@ public class Laby {
     @Override
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("██".repeat(dimension.getX()+2));
+        stringBuilder.append("\n");
         for(ArrayList<Point> ligne : carte){
+            stringBuilder.append("██");
             for(Point col : ligne){
                 stringBuilder.append(col.getDessin());
             }
+            stringBuilder.append("██");
             stringBuilder.append("\n");
         }
+        stringBuilder.append("██".repeat(dimension.getX()+2));
+        stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 }
