@@ -86,6 +86,10 @@ public class Laby {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
