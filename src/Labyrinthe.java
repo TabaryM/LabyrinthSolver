@@ -3,7 +3,7 @@ import labyrinthe.modele.Laby;
 public class Labyrinthe /*extends Application*/ {
 
     public static void main(String[] args) {
-        Laby laby = new Laby(10,10);
+        Laby laby = new Laby(15, 10);
         System.out.println(laby);
         //launch(args);
 

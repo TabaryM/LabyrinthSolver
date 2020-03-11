@@ -32,8 +32,8 @@ public abstract class Point {
     }
 
     /**
-     * retourne
-     * @return
+     * Retourne un caractère représentant la case
+     * @return String caractère de la case
      */
     public abstract String getDessin();
 
