@@ -1,16 +1,16 @@
-package labyrinthe.modele.points;
+package labyrinthe.points;
 
-public class Sortie extends Cellule {
-    /** Instancie une case de sortie de labyrinthe
+public class Entree extends Cellule {
+    /** Instancie une case d'entrée de labyrinthe
      * @param x int coordonnée en abscisse de la case
      * @param y int coordonnée en ordonnée de la case
      */
-    public Sortie(int x, int y) {
+    public Entree(int x, int y) {
         super(x, y, false);
     }
 
     @Override
     public String getDessin() {
-        return "◎";
+        return "◉";
     }
 }
