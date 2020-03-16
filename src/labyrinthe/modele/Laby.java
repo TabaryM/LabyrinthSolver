@@ -12,7 +12,7 @@ public class Laby {
     private int hauteur;
     private int largeur;
 
-    private ArrayList<ArrayList<Point>> carte;
+    private ArrayList<ArrayList<Cellule>> carte;
 
     /**
      * Instancie un nouveau Labyrinthe
@@ -28,13 +28,14 @@ public class Laby {
             carte.add(new ArrayList<>());
         }
         generateLabyPrim();
+
     }
 
     /**
      * Retourne les coordonnées du point d'entrée du laby
      * @return entree Point : le point d'entrée du laby
      */
-    public Point getEntree() {
+    public Cellule getEntree() {
         return entree;
     }
 
@@ -42,7 +43,7 @@ public class Laby {
      * Retourne les coordonnées du point de sortie du laby
      * @return sortie Point : le point de sortie du laby
      */
-    public Point getSortie() {
+    public Cellule getSortie() {
         return sortie;
     }
 
@@ -79,54 +80,35 @@ public class Laby {
     }
 
     /**
-     * Genere un labyrinthe moche
+     * Génère un labyrinthe selon l'algo aléatoire de Prim (avec modifications personnelles)
+     * Modifications personnelles :
+     *  On retire 10% des murs en contact avec des couloirs
      */
-    private void generateLabyRandom(){
-        for(int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-                if (Math.random() > 0.666) {
-                    carte.get(j).add(new Mur(j, i));
-                }else{
-                    carte.get(j).add(new Murnt(j, i));
-                }
-            }
-        }
-        carte.get(0).set(0, new Entree(0, 0));
-        carte.get(largeur - 1).set(hauteur - 1, new Sortie(largeur - 1, hauteur - 1));
-    }
-
-    // TODO comprendre https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim's_algorithm
     private void generateLabyPrim(){
         // On remplis le labyrinthe de murs
         for(int i = 0; i < largeur; i++) {
             for (int j = 0; j < hauteur; j++) {
-                carte.get(i).add(new Mur(i, j));
+                carte.get(i).add(new Cellule(i, j, true));
             }
         }
 
-        // La liste des murs que l'on va remplir et vider dynamiquement
-        ArrayList<Mur> murs = new ArrayList<>();
         // La liste des éléments que l'on va uniquement remplir
-        ArrayList<Point> visites = new ArrayList<>();
+        ArrayList<Cellule> visites = new ArrayList<>();
 
         // On choisis un premier point de départ au hasard qui ne sera pas un mur du labyrinthe
         int randomX = (int) (Math.random() * (largeur));
         int randomY = (int) (Math.random() * (hauteur));
 
-        // On passe le point de départ en non mur
-        carte.get(randomX).remove(randomY);
-        carte.get(randomX).add(randomY, new Murnt(randomX, randomY));
-
-        // On ajoute tous les murs voisins du point de départ à la liste des murs à visiter
-        for(Point voisin : voisins(carte.get(randomX).get(randomY))){
-            if(voisin.getClass().getSimpleName().equals("Mur")){
-                murs.add((Mur) voisin);
-            }
-        }
-
-        Point courrant;
-        int random;
+        Cellule courrant = carte.get(randomX).get(randomY);
+        courrant.setEstMur(false);
         int cptVoisinsVisites;
+        int random;
+
+        // La liste des murs que l'on va remplir et vider dynamiquement
+        // On ajoute tous les murs voisins du point de départ à la liste des murs à visiter
+        ArrayList<Cellule> murs = new ArrayList<>();
+        murs.add(courrant);
+        murs.addAll(voisins(courrant));
 
         // Tant que la liste des murs à visiter n'est pas vide
         // On choisis un mur aléatoire parmis les murs à visiter
@@ -136,32 +118,39 @@ public class Laby {
         //   On marque la cellule actuelle comme un non mur
         //   On ajoute les voisins de cette cellule à la liste des murs à visiter
         while(!murs.isEmpty()){
-            random = (int) (Math.random()*murs.size());
-            courrant = murs.get(random);
-            visites.add(courrant);
-            murs.remove(random);
+            courrant = murs.get((int) (Math.random()*murs.size()));
 
-            Vector<Point> v = voisins(courrant);
+            //courrant = murs.get(0);
+            murs.remove(courrant);
+            // On ajoute l'element courrant à la liste des éléments visités
+            visites.add(courrant);
+
             cptVoisinsVisites = 0;
-            for(Point p : v){
+            // compte le nombre de voisins visités
+            for(Cellule p : voisins(courrant)){
                 if(visites.contains(p)){
                     cptVoisinsVisites++;
                 }
             }
-
             // Si il y a seulement un voisin déjà visité
+            // On retire le mur de la cellule actuelle
             if(cptVoisinsVisites == 1){
-                carte.get(courrant.getX()).remove(courrant);
-                carte.get(courrant.getX()).add(courrant.getY(), new Murnt(courrant.getX(), courrant.getY()));
-            }
-
-            for(Point voisin : voisins(courrant)){
-                if(voisin.getClass().getSimpleName().equals("Mur")){
-                    murs.add((Mur) voisin);
+                carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
+                // On ajoute tout les murs voisins à l'élément courrant à la liste des murs à visiter
+                for(Cellule voisin : voisins(courrant)){
+                    if(!murs.contains(voisin) && !visites.contains(voisin) && voisin.isMur()){
+                        murs.add(voisin);
+                    }
+                }
+            } else {
+                if((int) (Math.random()*100) >= 90){
+                    carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
                 }
             }
         }
 
+        // Si le labyrinthe est mal généré, on recommance
+        if(visites.size() < 250) generateLabyPrim();
     }
 
     /**
@@ -187,8 +176,8 @@ public class Laby {
         return stringBuilder.toString();
     }
 
-    private Vector<Point> voisins(Point p){
-        Vector<Point> voisins = new Vector<>();
+    private Vector<Cellule> voisins(Cellule p){
+        Vector<Cellule> voisins = new Vector<>();
         int posXVoisin;
         int posYVoisin;
         if(p.getX()>0){
