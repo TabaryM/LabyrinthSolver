@@ -9,6 +9,10 @@ public class Sortie extends Cellule {
         super(x, y, false);
     }
 
+    public Sortie(Cellule cellule){
+        this(cellule.getX(), cellule.getY());
+    }
+
     @Override
     public String getDessin() {
         return "◎";

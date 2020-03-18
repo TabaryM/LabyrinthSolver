@@ -2,6 +2,7 @@ package labyrinthe;
 
 import labyrinthe.points.*;
 
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -21,49 +22,35 @@ public class Laby {
      * @param largeur int : largeur maximales du laby
      */
     public Laby(int hauteur, int largeur){
-        carte = new ArrayList<>();
+        resetCarte();
         this.hauteur = hauteur;
         this.largeur = largeur;
-        for(int i = 0; i < largeur; i++){
-            carte.add(new ArrayList<>());
-        }
         generateLabyPrim();
 
         // Ajoute une entrée en haut à gauche
-        Cellule tmp;
-        boolean b = false;
+        ArrayList<Cellule> tmp = new ArrayList<>();
         for(int i = 0; i < largeur; i++) {
             for (int j = 0; j < hauteur; j++) {
-                tmp = carte.get(i).get(j);
-                if(!tmp.isMur()){
-                    b = true;
-                    carte.get(i).remove(j);
-                    entree = new Entree(i,j);
-                    carte.get(i).add(j, entree);
-                    System.out.println(entree);
-                    break;
+                if(!carte.get(i).get(j).isMur()){
+                    tmp.add(carte.get(i).get(j));
                 }
             }
-            if(b) break;
         }
 
-        b = false;
-        for(int i = largeur -1; i >= 0; i--) {
-            for (int j = hauteur -1; j >= 0; j--) {
-                tmp = carte.get(i).get(j);
-                if(!tmp.isMur()){
-                    b = true;
-                    carte.get(i).remove(j);
-                    sortie = new Sortie(i,j);
-                    carte.get(i).add(j, sortie);
-                    System.out.println(sortie);
-                    break;
-                }
-            }
-            if(b) break;
+        entree = new Entree(tmp.get(0));
+        carte.get(entree.getX()).remove(entree.getY());
+        carte.get(entree.getX()).add(entree.getY(), entree);
+
+        sortie = new Sortie(tmp.get(tmp.size()-1));
+        carte.get(sortie.getX()).remove(sortie.getY());
+        carte.get(sortie.getX()).add(sortie.getY(), sortie);
+    }
+
+    public void resetCarte(){
+        carte = new ArrayList<>();
+        for(int i = 0; i < largeur; i++){
+            carte.add(new ArrayList<>());
         }
-
-
     }
 
     /**
@@ -120,6 +107,7 @@ public class Laby {
      *  On retire 10% des murs en contact avec des couloirs
      */
     private void generateLabyPrim(){
+        resetCarte();
         // On remplis le labyrinthe de murs
         for(int i = 0; i < largeur; i++) {
             for (int j = 0; j < hauteur; j++) {
@@ -178,11 +166,12 @@ public class Laby {
                     }
                 }
             } else {
-
+                /*
                 // On transforme 10% des murs à coté des couloirs en couloir
                 if((int) (Math.random()*10) == 1){
                     carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
                 }
+                */
 
                 // Si la cellule est entre deux couloirs on la transforme en couloir
                 cptVoisinsVisites = 0;
@@ -191,29 +180,28 @@ public class Laby {
                         cptVoisinsVisites++;
                     }
                 }
-                if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 50){
+                if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 33){
                     carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
                 }
 
             }
         }
 
-        /*
         // Si le labyrinthe est mal généré, on recommance
-        if(visites.size() < 250) {
+        if(visites.size() < (hauteur*largeur)/2) {
             generateLabyPrim();
         }
-        */
     }
 
     private ArrayList<Cellule> cheminDijkstra(){
+        initDijsktra();
         // Initialisation de la route
         ArrayList<Cellule> route = new ArrayList<>();
 
         // Liste des cellules à voir
         ArrayList<Cellule> liste = new ArrayList<>();
-        for(ArrayList<Cellule> ligne : carte){
-            for(Cellule cellule : ligne){
+        for(ArrayList<Cellule> colonne : carte){
+            for(Cellule cellule : colonne){
                 if(!cellule.isMur()){
                     liste.add(cellule);
                 }
@@ -226,19 +214,9 @@ public class Laby {
             liste.remove(courrant);
 
             for(Cellule voisin : voisins(courrant)){
-                if(voisin.getDistance() < courrant.getDistance()+voisin.getCoutAcces()){
-                    voisin.setDistance(courrant.getDistance()+voisin.getCoutAcces());
-                    voisin.setPere(courrant);
-                }
+                majDistance(courrant, voisin);
             }
         }
-
-        if(sortie.estFilsDe(entree)){
-            route.add(entree);
-            route.add(sortie);
-            return route;
-        }
-
         return getCheminVersSortie();
     }
 
@@ -247,11 +225,6 @@ public class Laby {
         ArrayList<Cellule> chemin = new ArrayList<>();
 
         inverse.add(sortie);
-        System.out.println("sortie : "+sortie);
-        System.out.println("entree : "+entree);
-        System.out.println("inverse : "+inverse);
-        System.out.println("(inverse.size() -1) : "+(inverse.size() -1));
-        System.out.println("inverse.get(inverse.size() -1) : "+inverse.get(inverse.size() -1));
         while(!inverse.get(inverse.size() -1).equals(entree)){
             inverse.add(inverse.get(inverse.size() -1).getPere());
         }
@@ -260,7 +233,19 @@ public class Laby {
             chemin.add(inverse.get(i));
         }
 
+        chemin.remove(0);
+        chemin.remove(chemin.size() -1);
+
         return chemin;
+    }
+
+    private void initDijsktra(){
+        for(ArrayList<Cellule> colonne : carte){
+            for(Cellule cellule : colonne){
+                cellule.setDistance(Integer.MAX_VALUE -10);
+            }
+        }
+        entree.setDistance(0);
     }
 
     /**
@@ -269,15 +254,22 @@ public class Laby {
      * @return la cellule avec le cout d'accès le plus faible
      */
     private Cellule cellulePlusSimpleDAcces(ArrayList<Cellule> liste){
-        int coutMax = 0;
+        int coutMax = Integer.MAX_VALUE;
         Cellule res = null;
         for(Cellule cellule : liste){
-            if(coutMax >= cellule.getCoutAcces()){
+            if(cellule.getDistance() < coutMax){
                 coutMax = cellule.getCoutAcces();
                 res = cellule;
             }
         }
         return res;
+    }
+
+    private void majDistance(Cellule c1, Cellule c2){
+        if(c1.getDistance() + c2.getCoutAcces() < c2.getDistance()){
+            c2.setDistance(c1.getDistance() + c2.getCoutAcces());
+            c2.setPere(c1);
+        }
     }
 
     /**
@@ -286,6 +278,24 @@ public class Laby {
      */
     @Override
     public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("\n");
+
+        for(int i = 0; i < hauteur; i++) {
+            stringBuilder.append("██");
+            for (int j = 0; j < largeur; j++) {
+                stringBuilder.append(carte.get(j).get(i).getDessin());
+            }
+            stringBuilder.append("██");
+            stringBuilder.append("\n");
+        }
+        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    public String labyAvecChemin(){
         ArrayList<Cellule> chemin = cheminDijkstra();
         Cellule courrant;
 

@@ -21,7 +21,7 @@ public class Cellule {
         this.y = y;
         this.estMur = estMur;
         distance = Integer.MAX_VALUE - 10;
-        pere = this;
+        pere = null;
         this.coutAcces = coutAcces;
     }
 
@@ -31,7 +31,7 @@ public class Cellule {
      * @param y int : coordonnées en ordonnée
      */
     public Cellule(int x, int y, boolean estMur) {
-        new Cellule(x, y, estMur, 1);
+        this(x, y, estMur, 1);
     }
 
     /**
