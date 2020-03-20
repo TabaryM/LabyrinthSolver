@@ -72,9 +72,9 @@ public class Cellule {
      */
     public String getDessin(){
         if(estMur){
-            return "██";
+            return "███";
         } else {
-            return "  ";
+            return "   ";
         }
     }
 

@@ -14,7 +14,14 @@ public class Entree extends Cellule {
     }
 
     @Override
+    public String toString() {
+        return "Entree : [" + getX() +
+                "," + getY() +
+                ']';
+    }
+
+    @Override
     public String getDessin() {
-        return "◉";
+        return " E ";
     }
 }

@@ -14,7 +14,14 @@ public class Sortie extends Cellule {
     }
 
     @Override
+    public String toString() {
+        return "Sortie : [" + getX() +
+                "," + getY() +
+                ']';
+    }
+
+    @Override
     public String getDessin() {
-        return "◎";
+        return " S ";
     }
 }

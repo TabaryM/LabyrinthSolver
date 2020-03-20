@@ -26,8 +26,17 @@ public class Laby {
         this.hauteur = hauteur;
         this.largeur = largeur;
         generateLabyPrim();
+        initEntreeSortie();
+    }
 
-        // Ajoute une entrée en haut à gauche
+    private void resetCarte(){
+        carte = new ArrayList<>();
+        for(int i = 0; i < largeur; i++){
+            carte.add(new ArrayList<>());
+        }
+    }
+
+    private void initEntreeSortie(){
         ArrayList<Cellule> tmp = new ArrayList<>();
         for(int i = 0; i < largeur; i++) {
             for (int j = 0; j < hauteur; j++) {
@@ -44,13 +53,6 @@ public class Laby {
         sortie = new Sortie(tmp.get(tmp.size()-1));
         carte.get(sortie.getX()).remove(sortie.getY());
         carte.get(sortie.getX()).add(sortie.getY(), sortie);
-    }
-
-    public void resetCarte(){
-        carte = new ArrayList<>();
-        for(int i = 0; i < largeur; i++){
-            carte.add(new ArrayList<>());
-        }
     }
 
     /**
@@ -180,10 +182,9 @@ public class Laby {
                         cptVoisinsVisites++;
                     }
                 }
-                if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 33){
+                if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 20){
                     carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
                 }
-
             }
         }
 
@@ -221,6 +222,7 @@ public class Laby {
     }
 
     public ArrayList<Cellule> getCheminVersSortie(){
+        /*
         ArrayList<Cellule> inverse = new ArrayList<>();
         ArrayList<Cellule> chemin = new ArrayList<>();
 
@@ -235,6 +237,22 @@ public class Laby {
 
         chemin.remove(0);
         chemin.remove(chemin.size() -1);
+*/
+        ArrayList<Cellule> chemin = new ArrayList<>();
+
+        Cellule courrante = sortie;
+        try{
+            while (!courrante.equals(entree)) {
+                chemin.add(courrante);
+                courrante = courrante.getPere();
+            }
+        } catch (NullPointerException e){
+            generateLabyPrim();
+            initEntreeSortie();
+            initDijsktra();
+            chemin = cheminDijkstra();
+        }
+        chemin.remove(sortie);
 
         return chemin;
     }
@@ -243,6 +261,7 @@ public class Laby {
         for(ArrayList<Cellule> colonne : carte){
             for(Cellule cellule : colonne){
                 cellule.setDistance(Integer.MAX_VALUE -10);
+                cellule.setPere(null);
             }
         }
         entree.setDistance(0);
@@ -279,18 +298,18 @@ public class Laby {
     @Override
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("███".repeat(largeur+2));
         stringBuilder.append("\n");
 
         for(int i = 0; i < hauteur; i++) {
-            stringBuilder.append("██");
+            stringBuilder.append("███");
             for (int j = 0; j < largeur; j++) {
                 stringBuilder.append(carte.get(j).get(i).getDessin());
             }
-            stringBuilder.append("██");
+            stringBuilder.append("███");
             stringBuilder.append("\n");
         }
-        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("███".repeat(largeur+2));
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
@@ -300,23 +319,23 @@ public class Laby {
         Cellule courrant;
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("███".repeat(largeur+2));
         stringBuilder.append("\n");
 
         for(int i = 0; i < hauteur; i++) {
-            stringBuilder.append("██");
+            stringBuilder.append("███");
             for (int j = 0; j < largeur; j++) {
                 courrant = carte.get(j).get(i);
                 if(chemin.contains(courrant)){
-                    stringBuilder.append("░░");
+                    stringBuilder.append("░░░");
                 } else {
                     stringBuilder.append(carte.get(j).get(i).getDessin());
                 }
             }
-            stringBuilder.append("██");
+            stringBuilder.append("███");
             stringBuilder.append("\n");
         }
-        stringBuilder.append("██".repeat(largeur+2));
+        stringBuilder.append("███".repeat(largeur+2));
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
