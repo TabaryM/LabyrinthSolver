@@ -17,10 +17,10 @@ public class Cellule {
      * @param x int : coordonnées en abscisse
      * @param y int : coordonnées en ordonnée
      */
-    public Cellule(int x, int y, boolean estMur, int coutAcces) {
+    public Cellule(int x, int y, int coutAcces) {
         this.x = x;
         this.y = y;
-        this.estMur = estMur;
+        this.estMur = coutAcces == 0;
         distance = Integer.MAX_VALUE - 10;
         distanceEuclidienne = Integer.MAX_VALUE - 10;
         pere = null;
@@ -32,8 +32,8 @@ public class Cellule {
      * @param x int : coordonnées en abscisse
      * @param y int : coordonnées en ordonnée
      */
-    public Cellule(int x, int y, boolean estMur) {
-        this(x, y, estMur, 1);
+    public Cellule(int x, int y) {
+        this(x, y, 1);
     }
 
     /**
@@ -66,18 +66,6 @@ public class Cellule {
      */
     public void setEstMur(boolean estMur) {
         this.estMur = estMur;
-    }
-
-    /**
-     * Retourne un caractère représentant la case
-     * @return String caractère de la case
-     */
-    public String getDessin(){
-        if(estMur){
-            return "███";
-        } else {
-            return "   ";
-        }
     }
 
     /**
@@ -136,6 +124,10 @@ public class Cellule {
         return (int)(distance+distanceEuclidienne);
     }
 
+    public int getCoutAStarAmplifie(double puissance){
+        return distance + (int)(Math.pow(distanceEuclidienne, puissance));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -159,6 +151,26 @@ public class Cellule {
         int result = getX();
         result = 31 * result + getY();
         return result;
+    }
+
+    /**
+     * Retourne un caractère représentant la case
+     * @return String caractère de la case
+     */
+    public String getDessin(){
+        if(estMur){
+            return "███";
+        } else {
+            switch (coutAcces){
+                case 1:
+                    return "p";
+                case 2:
+                    return "s";
+                case 3:
+                    return "e";
+            }
+            return "   ";
+        }
     }
 
     @Override

@@ -23,15 +23,15 @@ public class Laby {
     public Laby(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
+
+        // Initialisation du labyrinthe
         carte = new ArrayList<>();
         for(int i = 0; i < colonne; i++){
             carte.add(new ArrayList<>());
             for(int j = 0; j < ligne; j++){
-                carte.get(i).add(new Cellule(i, j, false));
+                carte.get(i).add(new Cellule(i, j, 1));
             }
         }
-        generateLabyPrim();
-        initEntreeSortie();
     }
 
     /**
@@ -48,7 +48,7 @@ public class Laby {
     /**
      * Initialise une entrée et une sortie
      */
-    private void initEntreeSortie(){
+    public void initEntreeSortie(){
         ArrayList<Cellule> tmp = getCouloirs();
 
         entree = new Entree(tmp.get(0));
@@ -134,7 +134,7 @@ public class Laby {
      * Modifications personnelles :
      *  On retire 10% des murs en contact avec des couloirs
      */
-    private void generateLabyPrim(){
+    public void generateLabyPrim(){
         resetCarte();
         // On remplis le labyrinthe de murs
         for(int i = 0; i < colonne; i++) {
@@ -218,6 +218,7 @@ public class Laby {
         if(visites.size() < (ligne * colonne)/2) {
             generateLabyPrim();
         }
+        initEntreeSortie();
     }
 
     /**
@@ -230,10 +231,19 @@ public class Laby {
         stringBuilder.append("███".repeat(colonne +2));
         stringBuilder.append("\n");
 
+        Cellule courrant;
+
         for(int i = 0; i < ligne; i++) {
             stringBuilder.append("███");
             for (int j = 0; j < colonne; j++) {
-                stringBuilder.append(carte.get(j).get(i).getDessin());
+                courrant = carte.get(j).get(i);
+                if(courrant.isMur()){
+                    stringBuilder.append(courrant.getDessin());
+                } else {
+                    stringBuilder.append(" ");
+                    stringBuilder.append(courrant.getDessin());
+                    stringBuilder.append(" ");
+                }
             }
             stringBuilder.append("███");
             stringBuilder.append("\n");
@@ -258,7 +268,7 @@ public class Laby {
             chemin.add(courrant);
             courrant = courrant.getPere();
         }
-        chemin.remove(sortie);
+        chemin.add(entree);
 
         return chemin;
     }
@@ -283,14 +293,16 @@ public class Laby {
                     if(courrant.getPere() != voisin){
                         courrant.majDistanceVers(voisin);
                     }
-                    if(!visites.contains(voisin)){
+                    if(!visites.contains(voisin) && !liste.contains(voisin)){
                         liste.add(voisin);
                     }
                 }
             }
 
             liste.remove(courrant);
-            if(!visites.contains(courrant)) visites.add(courrant);
+            if(!visites.contains(courrant)) {
+                visites.add(courrant);
+            }
         }
     }
 
@@ -321,9 +333,6 @@ public class Laby {
             chemin.add(courrant.getPere());
             courrant = courrant.getPere();
         }
-
-        chemin.remove(entree);
-        chemin.remove(sortie);
 
         return chemin;
     }
@@ -368,6 +377,10 @@ public class Laby {
         }
     }
 
+    public void afficheConstrucionAStar(){
+
+    }
+
     /**
      * Retourne la Cellule la plus prometteuse pour aller vers la sortie
      * @param liste Liste des cellules à évaluer
@@ -378,7 +391,7 @@ public class Laby {
         Cellule res = null;
         for(Cellule cellule : liste){
             if(cellule.getCoutAStar() < min){
-                min = cellule.getCoutAStar();
+                min = cellule.getCoutAStarAmplifie(1);
                 res = cellule;
             }
         }
@@ -405,22 +418,26 @@ public class Laby {
      */
     public String labyAvecChemin(String modeChemin){
         ArrayList<Cellule> chemin;
-        StringBuilder stringBuilder = new StringBuilder();
         switch (modeChemin){
             case "Dijkstra":
+                System.out.println("Chemin selon Dijkstra :");
                 chemin = getCheminDijkstra();
-                stringBuilder.append("Chemin selon Dijkstra : \n");
                 break;
             case "AStar":
+                System.out.println("Chemin selon A* :");
                 chemin = getCheminAStar();
-                stringBuilder.append("Chemin selon A* : \n");
                 break;
             default:
                 chemin = getCheminDijkstra();
 
         }
-        Cellule courrant;
 
+        return labyConstructionChemin(chemin);
+    }
+
+    public String labyConstructionChemin(ArrayList<Cellule> chemin){
+        StringBuilder stringBuilder = new StringBuilder();
+        Cellule courrant;
         stringBuilder.append("███".repeat(colonne +2));
         stringBuilder.append("\n");
 
@@ -429,9 +446,17 @@ public class Laby {
             for (int j = 0; j < colonne; j++) {
                 courrant = carte.get(j).get(i);
                 if(chemin.contains(courrant)){
-                    stringBuilder.append("░░░");
+                    stringBuilder.append("░");
+                    stringBuilder.append(courrant.getDessin());
+                    stringBuilder.append("░");
                 } else {
-                    stringBuilder.append(carte.get(j).get(i).getDessin());
+                    if(courrant.isMur()){
+                        stringBuilder.append(courrant.getDessin());
+                    } else {
+                        stringBuilder.append(" ");
+                        stringBuilder.append(courrant.getDessin());
+                        stringBuilder.append(" ");
+                    }
                 }
             }
             stringBuilder.append("███");

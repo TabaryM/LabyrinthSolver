@@ -6,7 +6,7 @@ public class Sortie extends Cellule {
      * @param y int coordonnée en ordonnée de la case
      */
     public Sortie(int x, int y) {
-        super(x, y, false);
+        super(x, y, 1);
     }
 
     public Sortie(Cellule cellule){
@@ -26,6 +26,6 @@ public class Sortie extends Cellule {
 
     @Override
     public String getDessin() {
-        return " S ";
+        return "S";
     }
 }
