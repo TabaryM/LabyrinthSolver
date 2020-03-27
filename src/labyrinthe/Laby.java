@@ -4,7 +4,6 @@ import labyrinthe.points.*;
 
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
 
 public class Laby {
 
@@ -24,18 +23,31 @@ public class Laby {
     public Laby(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
-        resetCarte();
+        carte = new ArrayList<>();
+        for(int i = 0; i < colonne; i++){
+            carte.add(new ArrayList<>());
+            for(int j = 0; j < ligne; j++){
+                carte.get(i).add(new Cellule(i, j, false));
+            }
+        }
         generateLabyPrim();
         initEntreeSortie();
     }
 
+    /**
+     * Réinitialise la carte (supprime toutes les cellules)
+     */
     private void resetCarte(){
-        carte = new ArrayList<>();
-        for(int i = 0; i < ligne; i++){
-            carte.add(new ArrayList<>());
+        for(int i = 0; i < colonne; i++){
+            for(int j = 0; j < ligne; j++){
+                carte.get(i).get(j).setEstMur(false);
+            }
         }
     }
 
+    /**
+     * Initialise une entrée et une sortie
+     */
     private void initEntreeSortie(){
         ArrayList<Cellule> tmp = getCouloirs();
 
@@ -54,7 +66,7 @@ public class Laby {
     /**
      * Retourne les coordonnées du point d'entrée du laby
      * @return entree Point : le point d'entrée du laby
-         */
+     */
     public Cellule getEntree() {
         return entree;
     }
@@ -73,8 +85,10 @@ public class Laby {
      */
     public ArrayList<Cellule> getCouloirs() {
         ArrayList<Cellule> couloirs = new ArrayList<>();
-        for(ArrayList<Cellule> ligne : carte){
-            for(Cellule cellule : ligne){
+        Cellule cellule;
+        for(int i = 0; i < colonne; i++){
+            for(int j = 0; j < ligne; j++){
+                cellule = carte.get(i).get(j);
                 if(!cellule.isMur()){
                     couloirs.add(cellule);
                 }
@@ -125,7 +139,7 @@ public class Laby {
         // On remplis le labyrinthe de murs
         for(int i = 0; i < colonne; i++) {
             for (int j = 0; j < ligne; j++) {
-                carte.get(i).add(new Cellule(i, j, true));
+                carte.get(i).get(j).setEstMur(true);
             }
         }
 
@@ -235,7 +249,7 @@ public class Laby {
      * Retourne un chemin depuis l'entrée vers la sortie selon l'algorithme de Dijkstra
      * @return chemin ArrayList<Cellule> : chemin entre this.entree et this.sortie
      */
-    private ArrayList<Cellule> cheminDijkstra(){
+    private ArrayList<Cellule> getCheminDijkstra(){
         calculDistanceDisjkstra();
         ArrayList<Cellule> chemin = new ArrayList<>();
         Cellule courrant = sortie;
@@ -249,23 +263,9 @@ public class Laby {
         return chemin;
     }
 
-    private ArrayList<Cellule> getCheminAStar(){
-        aStar();
-        ArrayList<Cellule> chemin = new ArrayList<>();
-
-        chemin.add(sortie);
-        Cellule courrant = sortie;
-        while (courrant != null){
-            chemin.add(courrant.getPere());
-            courrant = courrant.getPere();
-        }
-
-        chemin.remove(entree);
-        chemin.remove(sortie);
-
-        return chemin;
-    }
-
+    /**
+     * Calcule la distance pour chaque Cellule vers la sortie selon l'algorithme de Dijkstra
+     */
     private void calculDistanceDisjkstra(){
         resetDijkstra();
 
@@ -294,6 +294,9 @@ public class Laby {
         }
     }
 
+    /**
+     * Réinitialise les distances pour chaque Cellule du labyrinthe vers la sortie
+     */
     private void resetDijkstra(){
         for(ArrayList<Cellule> colonne : carte){
             for(Cellule cellule : colonne){
@@ -304,7 +307,31 @@ public class Laby {
         entree.setDistance(0);
     }
 
-    public void aStar(){
+    /**
+     * Retourne le chemin calculé par l'algorithme A*
+     * @return chemin : ArrayList<Cellule> une chemin entre entrée et sortie
+     */
+    private ArrayList<Cellule> getCheminAStar(){
+        calculDistanceAStar();
+        ArrayList<Cellule> chemin = new ArrayList<>();
+
+        chemin.add(sortie);
+        Cellule courrant = sortie;
+        while (courrant != null){
+            chemin.add(courrant.getPere());
+            courrant = courrant.getPere();
+        }
+
+        chemin.remove(entree);
+        chemin.remove(sortie);
+
+        return chemin;
+    }
+
+    /**
+     * Calcule la distance pour chaque Cellule vers la sortie selon l'algorithme A*
+     */
+    public void calculDistanceAStar(){
         resetDijkstra();
         // On calcule les heuristiques pour toutes les cellules
         for(Cellule cellule : getCouloirs()){
@@ -341,6 +368,11 @@ public class Laby {
         }
     }
 
+    /**
+     * Retourne la Cellule la plus prometteuse pour aller vers la sortie
+     * @param liste Liste des cellules à évaluer
+     * @return res Cellule : une des meilleures cellules
+     */
     private Cellule plusInteressante(ArrayList<Cellule> liste){
         int min = Integer.MAX_VALUE - 10;
         Cellule res = null;
@@ -354,24 +386,29 @@ public class Laby {
     }
 
     /**
-     * Retourne la distance euclidienne
-     * @param cellule
-     * @return
+     * Retourne la distance euclidienne d'une cellule vers la sortie
+     * @param cellule Cellule qui nous interesse
+     * @return distance euclidienne entre le cellule passée en paramètre et la sortie
      */
     private double heuristique(Cellule cellule){
-        double res = 0 ;
+        double res;
         double coteX = Math.pow((Math.abs(cellule.getX() - sortie.getX())), 2);
         double coteY = Math.pow((Math.abs(cellule.getY() - sortie.getY())), 2);
         res = Math.sqrt(coteX + coteY);
         return res;
     }
 
+    /**
+     * Retourne une chemin entre l'entrée et la sortie
+     * @param modeChemin String : l'algorithme calculant le chemin
+     * @return Une représentation graphique (avec des caractères ASCII) du labyrinthe
+     */
     public String labyAvecChemin(String modeChemin){
         ArrayList<Cellule> chemin;
         StringBuilder stringBuilder = new StringBuilder();
         switch (modeChemin){
             case "Dijkstra":
-                chemin = cheminDijkstra();
+                chemin = getCheminDijkstra();
                 stringBuilder.append("Chemin selon Dijkstra : \n");
                 break;
             case "AStar":
@@ -379,7 +416,7 @@ public class Laby {
                 stringBuilder.append("Chemin selon A* : \n");
                 break;
             default:
-                chemin = cheminDijkstra();
+                chemin = getCheminDijkstra();
 
         }
         Cellule courrant;
