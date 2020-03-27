@@ -10,6 +10,7 @@ public class Cellule {
     private Cellule pere;
 
     private int coutAcces;
+    private double distanceEuclidienne;
 
     /**
      * Instancie un nouveau point
@@ -21,6 +22,7 @@ public class Cellule {
         this.y = y;
         this.estMur = estMur;
         distance = Integer.MAX_VALUE - 10;
+        distanceEuclidienne = Integer.MAX_VALUE - 10;
         pere = null;
         this.coutAcces = coutAcces;
     }
@@ -122,6 +124,18 @@ public class Cellule {
         return coutAcces;
     }
 
+    public void setDistanceEuclidienne(double distanceEuclidienne){
+        this.distanceEuclidienne = distanceEuclidienne;
+    }
+
+    public double getDistanceEuclidienne(){
+        return distanceEuclidienne;
+    }
+
+    public int getCoutAStar(){
+        return (int)(distance+distanceEuclidienne);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,6 +145,13 @@ public class Cellule {
 
         if (getX() != cellule.getX()) return false;
         return getY() == cellule.getY();
+    }
+
+    public void majDistanceVers(Cellule pere){
+        if(pere.getDistance() + this.getCoutAcces() <= this.getDistance()){
+            this.setDistance(pere.getDistance() + this.getCoutAcces());
+            this.setPere(pere);
+        }
     }
 
     @Override

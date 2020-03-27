@@ -17,7 +17,11 @@ public class Sortie extends Cellule {
     public String toString() {
         return "Sortie : [" + getX() +
                 "," + getY() +
-                ']';
+                ']' +
+                " Distance Euclidienne : " +
+                getDistanceEuclidienne() +
+                " gScore : " +
+                getDistance()+getCoutAcces() ;
     }
 
     @Override
