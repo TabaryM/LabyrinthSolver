@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
-public class ModeleLabyrinthe extends Observable {
+public class Modele extends Observable {
     private Carte carte;
     private ArrayList<Cellule> chemin;
     private Random random;
 
-    public ModeleLabyrinthe(int nbLignes, int nbColonnes){
+    public Modele(int nbLignes, int nbColonnes){
         super();
         random = new Random();
         carte = new Carte(nbLignes, nbColonnes, random);

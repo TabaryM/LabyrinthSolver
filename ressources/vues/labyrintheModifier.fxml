@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" spacing="4.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
+   <children>
+      <BorderPane>
+         <top>
+            <Label text="Algorithme" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <VBox BorderPane.alignment="CENTER">
+               <children>
+                  <RadioButton fx:id="aStar" mnemonicParsing="false" onAction="#setAlgoAStar" selected="true" text="A*">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="selectAlgo" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="dijkstra" mnemonicParsing="false" onAction="#setAlgoDijkstra" text="Dijkstra" toggleGroup="$selectAlgo" />
+               </children>
+            </VBox>
+         </center>
+         <bottom>
+            <Button fx:id="resoudre" mnemonicParsing="false" onAction="#resoudreLaby" prefHeight="26.0" prefWidth="97.0" text="Résoudre" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets left="6.0" top="4.0" />
+   </padding>
+</VBox>

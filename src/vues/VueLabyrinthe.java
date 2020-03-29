@@ -1,9 +1,8 @@
 package vues;
 
 import javafx.scene.layout.GridPane;
-import modele.ModeleLabyrinthe;
+import modele.Modele;
 import modele.points.Cellule;
-import outils.ImageFactory;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -11,7 +10,7 @@ import java.util.Observer;
 
 public class VueLabyrinthe extends GridPane implements Observer {
 
-    public VueLabyrinthe(ModeleLabyrinthe modele){
+    public VueLabyrinthe(Modele modele){
         super();
         assert (modele != null):"Erreur : modele non défini";
         modele.addObserver(this);
@@ -19,7 +18,7 @@ public class VueLabyrinthe extends GridPane implements Observer {
         refresh(modele);
     }
 
-    private void refresh(ModeleLabyrinthe modele){
+    private void refresh(Modele modele){
         assert (modele != null):"Erreur : modele non défini";
         getChildren().clear();
 
@@ -40,7 +39,7 @@ public class VueLabyrinthe extends GridPane implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        ModeleLabyrinthe monde = (ModeleLabyrinthe)o;
+        Modele monde = (Modele)o;
         refresh(monde);
     }
 }
