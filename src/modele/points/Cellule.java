@@ -181,12 +181,12 @@ public class Cellule {
             return "███";
         } else {
             switch (coutAcces){
-                case 1:
-                    return "p";
-                case 2:
-                    return "s";
-                case 3:
-                    return "e";
+                case 1: // Pierre
+                    return "\u001B[37mp\u001B[0m";
+                case 2: // Sable
+                    return "\u001B[33ms\u001B[0m";
+                case 3: // Eau
+                    return "\u001B[34me\u001B[0m";
             }
             return "   ";
         }

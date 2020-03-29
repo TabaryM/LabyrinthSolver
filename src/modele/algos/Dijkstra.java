@@ -6,27 +6,25 @@ import modele.points.Cellule;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class Dijkstra {
-    private Carte carte;
-
+public class Dijkstra extends Algo {
     public Dijkstra(Carte carte) {
-        this.carte = carte;
+        super(carte);
     }
 
     /**
      * Retourne un chemin depuis l'entrée vers la sortie selon l'algorithme de Dijkstra
      * @return chemin ArrayList<Cellule> : chemin entre this.entree et this.sortie
      */
-    public ArrayList<Cellule> getCheminDijkstra(){
-        calculDistanceDisjkstra();
+    public ArrayList<Cellule> getChemin(){
+        calculDistances();
         ArrayList<Cellule> chemin = new ArrayList<>();
-        Cellule courrant = carte.getSortie();
-        while(!courrant.equals(carte.getEntree())){
+        Cellule courrant = getCarte().getSortie();
+        while(!courrant.equals(getCarte().getEntree())){
             //System.out.println("Cellule : "+courrant+"\tPere : "+courrant.getPere());
             chemin.add(courrant);
             courrant = courrant.getPere();
         }
-        chemin.add(carte.getEntree());
+        chemin.add(getCarte().getEntree());
 
         return chemin;
     }
@@ -34,18 +32,18 @@ public class Dijkstra {
     /**
      * Calcule la distance pour chaque Cellule vers la sortie selon l'algorithme de Dijkstra
      */
-    private void calculDistanceDisjkstra(){
-        carte.resetValeursAlgos();
+    public void calculDistances(){
+        getCarte().resetValeursAlgos();
 
         ArrayList<Cellule> visites = new ArrayList<>();
         ArrayList<Cellule> liste = new ArrayList<>();
         Cellule courrant;
 
-        liste.add(carte.getEntree());
+        liste.add(getCarte().getEntree());
 
         while(!liste.isEmpty()){
             courrant = liste.get(0);
-            Vector<Cellule> voisins = carte.voisins(courrant);
+            Vector<Cellule> voisins = getCarte().voisins(courrant);
             for(Cellule voisin : voisins){
                 if(!voisin.isMur()){
                     if(courrant.getPere() != voisin){

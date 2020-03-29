@@ -6,6 +6,7 @@ import modele.points.Sortie;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 public class Carte implements Iterable<ArrayList<Cellule>> {
@@ -14,10 +15,12 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
     private Sortie sortie;
     private int nbLignes;
     private int nbColonnes;
+    private Random random;
 
-    public Carte(int nbLignes, int nbColonnes){
+    public Carte(int nbLignes, int nbColonnes, Random random){
         this.nbColonnes = nbColonnes;
         this.nbLignes = nbLignes;
+        this.random = random;
 
         // Initialisation du labyrinthe
         resetCarte();
@@ -28,11 +31,13 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
      * Réinitialise la carte (supprime toutes les cellules)
      */
     private void resetCarte(){
+        int coutCellule;
         carte = new ArrayList<>();
         for(int i = 0; i < nbColonnes; i++){
             carte.add(new ArrayList<>());
             for(int j = 0; j < nbLignes; j++){
-                carte.get(i).add(new Cellule(i, j, 1));
+                coutCellule = random.nextInt(3) + 1;
+                carte.get(i).add(new Cellule(i, j, coutCellule));
             }
         }
     }

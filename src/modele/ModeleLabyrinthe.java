@@ -1,18 +1,22 @@
 package modele;
 
 import modele.algos.AStar;
+import modele.algos.Algo;
 import modele.algos.Dijkstra;
 import modele.points.Cellule;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ModeleLabyrinthe extends Modele {
     private Carte carte;
     private ArrayList<Cellule> chemin;
+    private Random random;
 
     public ModeleLabyrinthe(int nbLignes, int nbColonnes){
         super();
-        carte = new Carte(nbLignes, nbColonnes);
+        random = new Random();
+        carte = new Carte(nbLignes, nbColonnes, random);
         chemin = new ArrayList<>();
     }
 
@@ -27,16 +31,17 @@ public class ModeleLabyrinthe extends Modele {
     }
 
     public void calculChemin(String methode){
+        Algo algo;
         switch (methode){
-            case "Dijkstra":
-                Dijkstra dijkstra = new Dijkstra(carte);
-                chemin = dijkstra.getCheminDijkstra();
-                break;
             case "AStar":
-                AStar aStar = new AStar(carte);
-                chemin = aStar.getCheminAStar();
+                algo = new AStar(carte);
+                break;
+            case "Dijkstra":
+            default:
+                algo = new Dijkstra(carte);
                 break;
         }
+        chemin = algo.getChemin();
     }
 
     @Override
