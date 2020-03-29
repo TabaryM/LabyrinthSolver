@@ -1,6 +1,6 @@
-package labyrinthe;
+package modele;
 
-import labyrinthe.points.*;
+import modele.points.*;
 
 import java.util.ArrayList;
 import java.util.Vector;

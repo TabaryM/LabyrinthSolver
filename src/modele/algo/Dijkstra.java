@@ -1,4 +1,4 @@
-package labyrinthe.algo;
+package modele.algo;
 
 public class Dijkstra {
 }

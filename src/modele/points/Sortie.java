@@ -1,4 +1,4 @@
-package labyrinthe.points;
+package modele.points;
 
 public class Sortie extends Cellule {
     /** Instancie une case de sortie de labyrinthe

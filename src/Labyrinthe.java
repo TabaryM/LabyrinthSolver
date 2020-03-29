@@ -1,4 +1,4 @@
-import labyrinthe.Laby;
+import modele.Laby;
 
 public class Labyrinthe /*extends Application*/ {
 
