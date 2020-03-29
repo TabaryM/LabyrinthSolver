@@ -1,5 +1,7 @@
 package modele.points;
 
+import java.util.ArrayList;
+
 public class Cellule {
 
     private int x;
@@ -126,6 +128,23 @@ public class Cellule {
 
     public int getCoutAStarAmplifie(double puissance){
         return distance + (int)(Math.pow(distanceEuclidienne, puissance));
+    }
+
+    /**
+     * Retourne la Cellule la plus prometteuse pour aller vers la sortie
+     * @param liste Liste des cellules à évaluer
+     * @return res Cellule : une des meilleures cellules
+     */
+    public static Cellule plusInteressante(ArrayList<Cellule> liste){
+        int min = Integer.MAX_VALUE - 10;
+        Cellule res = null;
+        for(Cellule cellule : liste){
+            if(cellule.getCoutAStar() < min){
+                min = cellule.getCoutAStarAmplifie(1);
+                res = cellule;
+            }
+        }
+        return res;
     }
 
     @Override
