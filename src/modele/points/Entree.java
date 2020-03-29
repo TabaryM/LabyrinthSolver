@@ -1,23 +1,25 @@
 package modele.points;
 
-public class Entree extends Cellule {
+public class Entree extends CelluleType {
     /** Instancie une case d'entrée de labyrinthe
      * @param x int coordonnée en abscisse de la case
      * @param y int coordonnée en ordonnée de la case
      */
-    public Entree(int x, int y) {
-        super(x, y, 1);
+    public Entree(int x, int y, typeEnum typeEnum) {
+        super(x, y, typeEnum);
     }
 
-    public Entree(Cellule cellule){
-        this(cellule.getX(), cellule.getY());
+    public Entree(CelluleType celluleType){
+        this(celluleType.getX(), celluleType.getY(), celluleType.type);
     }
 
     @Override
     public String toString() {
-        return "Entree : [" + getX() +
-                "," + getY() +
-                ']';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{Entree, ");
+        stringBuilder.append(super.toString());
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     @Override
