@@ -6,9 +6,10 @@ import modele.algos.Dijkstra;
 import modele.points.Cellule;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
-public class ModeleLabyrinthe extends Modele {
+public class ModeleLabyrinthe extends Observable {
     private Carte carte;
     private ArrayList<Cellule> chemin;
     private Random random;
@@ -44,6 +45,10 @@ public class ModeleLabyrinthe extends Modele {
         chemin = algo.getChemin();
     }
 
+    public Carte getCarte(){
+        return carte;
+    }
+
     @Override
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
@@ -76,5 +81,13 @@ public class ModeleLabyrinthe extends Modele {
         stringBuilder.append("███".repeat(carte.getNbColonnes() +2));
         stringBuilder.append("\n");
         return stringBuilder.toString();
+    }
+
+    /**
+     * Demande l'actualisation des observeurs
+     */
+    public void modifier(){
+        setChanged();
+        notifyObservers();
     }
 }

@@ -1,13 +1,13 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import modele.Modele;
 import modele.ModeleLabyrinthe;
+import vues.VueLabyrinthe;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class Main extends Application {
 
@@ -18,23 +18,25 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         ModeleLabyrinthe modele = new ModeleLabyrinthe(20, 20);
-
-
-        FXMLLoader loader = new FXMLLoader();
-        URL path = getClass().getResource("vues/root.fxml");
-        loader.setLocation(path);
-        Pane root = loader.load();
-
-        loadComposantsApplication(root, modele);
+        modele.genereLabyrinthe("Prim");
         primaryStage.setTitle("Le LABYRINTHE d'ses morts !");
 
-        primaryStage.setScene(new Scene(root, 1000, 750));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("vues/legende.fxml"));
+        Pane legende = loader.load();
+
+
+        BorderPane root = new BorderPane();
+
+        Pane labyrinthe = new VueLabyrinthe(modele);
+        //Pane controles = new VueControles(modele);
+
+        root.setCenter(labyrinthe);
+        root.setBottom(legende);
+
+        primaryStage.setScene(new Scene(root, root.getPrefWidth(), root.getPrefHeight()));
         primaryStage.show();
-    }
-
-
-    private void loadComposantsApplication(Pane root, Modele modele) throws IOException {
-        // On charge tout les élément graphiques sur la racine
 
     }
+
 }
