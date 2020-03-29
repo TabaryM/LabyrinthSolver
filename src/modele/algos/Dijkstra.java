@@ -13,14 +13,14 @@ public class Dijkstra extends Algo {
 
     /**
      * Retourne un chemin depuis l'entrée vers la sortie selon l'algorithme de Dijkstra
-     * @return chemin ArrayList<Cellule> : chemin entre this.entree et this.sortie
+     * @return chemin ArrayList<CelluleType> : chemin entre this.entree et this.sortie
      */
     public ArrayList<Cellule> getChemin(){
         calculDistances();
         ArrayList<Cellule> chemin = new ArrayList<>();
         Cellule courrant = getCarte().getSortie();
         while(!courrant.equals(getCarte().getEntree())){
-            //System.out.println("Cellule : "+courrant+"\tPere : "+courrant.getPere());
+            //System.out.println("CelluleType : "+courrant+"\tPere : "+courrant.getPere());
             chemin.add(courrant);
             courrant = courrant.getPere();
         }
@@ -30,7 +30,7 @@ public class Dijkstra extends Algo {
     }
 
     /**
-     * Calcule la distance pour chaque Cellule vers la sortie selon l'algorithme de Dijkstra
+     * Calcule la distance pour chaque CelluleType vers la sortie selon l'algorithme de Dijkstra
      */
     public void calculDistances(){
         getCarte().resetValeursAlgos();

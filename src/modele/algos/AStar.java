@@ -12,7 +12,7 @@ public class AStar extends Algo {
 
     /**
      * Retourne le chemin calculé par l'algorithme A*
-     * @return chemin : ArrayList<Cellule> une chemin entre entrée et sortie
+     * @return chemin : ArrayList<CelluleType> une chemin entre entrée et sortie
      */
     public ArrayList<Cellule> getChemin(){
         calculDistances();
@@ -29,7 +29,7 @@ public class AStar extends Algo {
     }
 
     /**
-     * Calcule la distance pour chaque Cellule vers la sortie selon l'algorithme A*
+     * Calcule la distance pour chaque CelluleType vers la sortie selon l'algorithme A*
      */
     public void calculDistances(){
         getCarte().resetValeursAlgos();

@@ -55,13 +55,13 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         sortie = new Sortie(tmp.get(tmp.size()-1));
         carte.get(sortie.getX()).remove(sortie.getY());
         carte.get(sortie.getX()).add(sortie.getY(), sortie);
-        entree.setEstMur(false);
-        sortie.setEstMur(false);
+        entree.setRandomType(random);
+        sortie.setRandomType(random);
     }
 
     /**
      * Retourne la liste des couloirs du labyrinthe
-     * @return ArrayList<Cellule> : tout les couloirs du labyrinthe
+     * @return ArrayList<CelluleType> : tout les couloirs du labyrinthe
      */
     public ArrayList<Cellule> getCouloirs() {
         ArrayList<Cellule> couloirs = new ArrayList<>();
@@ -79,8 +79,8 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
 
     /**
      * Retourne les cellules voisines à la cellule passée en paramètres
-     * @param cellule Cellule : cellule dont on veut les voisins
-     * @return voisins Vector<Cellule> : liste des voisins
+     * @param cellule CelluleType : cellule dont on veut les voisins
+     * @return voisins Vector<CelluleType> : liste des voisins
      */
     public Vector<Cellule> voisins(Cellule cellule){
         Vector<Cellule> voisins = new Vector<>();
@@ -119,7 +119,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         // On remplis le labyrinthe de murs
         for(int i = 0; i < nbColonnes; i++) {
             for (int j = 0; j < nbLignes; j++) {
-                carte.get(i).get(j).setEstMur(true);
+                carte.get(i).get(j).setType(Cellule.typeEnum.mur);
             }
         }
 
@@ -131,7 +131,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         int randomY = (int) (Math.random() * (nbLignes));
 
         Cellule courrant = carte.get(randomX).get(randomY);
-        courrant.setEstMur(false);
+        courrant.setRandomType(random);
         int cptVoisinsVisites;
 
         // La liste des murs que l'on va remplir et vider dynamiquement
@@ -166,7 +166,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
             // Si il y a seulement un voisin déjà visité
             // On retire le mur de la cellule actuelle
             if(cptVoisinsVisites == 1){
-                carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
+                carte.get(courrant.getX()).get(courrant.getY()).setRandomType(random);
                 // On ajoute tout les murs voisins à l'élément courrant à la liste des murs à visiter
                 for(Cellule voisin : voisins(courrant)){
                     if(!murs.contains(voisin) && !visites.contains(voisin) && voisin.isMur()){
@@ -189,7 +189,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
                     }
                 }
                 if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 20){
-                    carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
+                    carte.get(courrant.getX()).get(courrant.getY()).setRandomType(random);
                 }
             }
         }
@@ -203,7 +203,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
 
     /**
      * Retourne la distance euclidienne d'une cellule vers la sortie
-     * @param cellule Cellule qui nous interesse
+     * @param cellule CelluleType qui nous interesse
      * @return distance euclidienne entre le cellule passée en paramètre et la sortie
      */
     public double calculeHeuristique(Cellule cellule){

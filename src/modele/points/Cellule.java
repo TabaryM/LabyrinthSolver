@@ -1,125 +1,156 @@
 package modele.points;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Cellule {
+    public enum typeEnum{
+        mur,
+        pierre,
+        sable,
+        eau;
 
+        public int getCoutAcces(){
+            int res;
+            switch (this){
+                case mur:
+                    res = Integer.MAX_VALUE-5;
+                    break;
+                case pierre:
+                default:
+                    res = 1;
+                    break;
+                case sable:
+                    res = 2;
+                    break;
+                case eau:
+                    res = 3;
+                    break;
+            }
+            return res;
+        }
+        public String getCouleurTerminal(){
+            String res;
+            switch (this){
+                case mur:
+                case pierre:
+                default:
+                    res = "\u001B[37m";
+                    break;
+                case sable:
+                    res = "\u001B[33m";
+                    break;
+                case eau:
+                    res = "\u001B[34m";
+                    break;
+            }
+            return res;
+        }
+    }
+    public typeEnum type;
     private int x;
     private int y;
-    private boolean estMur;
-
     private int distance;
     private Cellule pere;
-
-    private int coutAcces;
     private double distanceEuclidienne;
 
-    /**
-     * Instancie un nouveau point
-     * @param x int : coordonnées en abscisse
-     * @param y int : coordonnées en ordonnée
-     */
-    public Cellule(int x, int y, int coutAcces) {
+    public Cellule(int x, int y, typeEnum type) {
+        this.type = type;
         this.x = x;
         this.y = y;
-        this.estMur = coutAcces == 0;
         distance = Integer.MAX_VALUE - 10;
         distanceEuclidienne = Integer.MAX_VALUE - 10;
         pere = null;
-        this.coutAcces = coutAcces;
     }
 
-    /**
-     * Instancie un nouveau point
-     * @param x int : coordonnées en abscisse
-     * @param y int : coordonnées en ordonnée
-     */
-    public Cellule(int x, int y) {
-        this(x, y, 1);
+    public Cellule(int x, int y, int coutAcces){
+        this.x = x;
+        this.y = y;
+        distance = Integer.MAX_VALUE - 10;
+        distanceEuclidienne = Integer.MAX_VALUE - 10;
+        pere = null;
+        switch (coutAcces){
+            case 1:
+            default:
+                this.type = typeEnum.pierre;
+                break;
+            case 2:
+                this.type = typeEnum.sable;
+                break;
+            case 3:
+                this.type = typeEnum.eau;
+                break;
+        }
     }
 
-    /**
-     * Retourne la coordonnées en abscisse du point
-     * @return x int
-     */
     public int getX() {
         return x;
     }
 
-    /**
-     * Retourne la coordonnées en ordonnée du point
-     * @return y int
-     */
     public int getY() {
         return y;
     }
 
-    /**
-     * Retourne vrai si la cellule est un mur
-     * @return boolean estMur
-     */
-    public boolean isMur(){
-        return estMur;
+    public typeEnum getType() {
+        return type;
     }
 
-    /**
-     * Fixe l'état de la cellule
-     * @param estMur boolean : vrai si la cellule est un mur, faux sinon
-     */
-    public void setEstMur(boolean estMur) {
-        this.estMur = estMur;
+    public boolean isMur() {
+        return this.type.equals(typeEnum.mur);
     }
 
-    /**
-     * Retourne la distance depuis le point de départ
-     * @return int distance
-     */
+    public void setType(typeEnum type) {
+        this.type = type;
+    }
+
+    public void setRandomType(Random random){
+        switch (random.nextInt(3) + 1){
+            case 1:
+            default:
+                this.type = typeEnum.pierre;
+                break;
+            case 2:
+                this.type = typeEnum.sable;
+                break;
+            case 3:
+                this.type = typeEnum.eau;
+                break;
+        }
+    }
+
+    public int getCoutAcces(){
+        return type.getCoutAcces();
+    }
+
     public int getDistance() {
         return distance;
     }
 
-    /**
-     * Met à jour la distance depuis le point de départ
-     * @param distance int la nouvelle distance
-     */
-    public void setDistance(Integer distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
-    /**
-     * Retourne la cellule voisine à la cellule actuelle la plus proche du point de départ
-     * @return Cellule pere
-     */
     public Cellule getPere() {
         return pere;
     }
 
-    /**
-     * Met à jour le pere de la cellule actuelle
-     * @param pere Cellule la plus proche du point de départ
-     */
     public void setPere(Cellule pere) {
         this.pere = pere;
     }
 
-    public boolean estFilsDe(Cellule cellule){
-        return cellule.equals(pere);
+    public void majDistanceVers(Cellule pere){
+        if(pere.getDistance() + this.getCoutAcces() <= this.getDistance()){
+            this.setDistance(pere.getDistance() + this.getCoutAcces());
+            this.setPere(pere);
+        }
     }
 
-    /**
-     * Retourne le cout d'acces à la cellule actuelle
-     * @return int coutAcces
-     */
-    public int getCoutAcces(){
-        return coutAcces;
-    }
-
-    public void setDistanceEuclidienne(double distanceEuclidienne){
-        this.distanceEuclidienne = distanceEuclidienne;
-    }
-
-    public double getDistanceEuclidienne(){
+    public double getDistanceEuclidienne() {
         return distanceEuclidienne;
+    }
+
+    public void setDistanceEuclidienne(double distanceEuclidienne) {
+        this.distanceEuclidienne = distanceEuclidienne;
     }
 
     public int getCoutAStar(){
@@ -152,17 +183,10 @@ public class Cellule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Cellule cellule = (Cellule) o;
+        Cellule that = (Cellule) o;
 
-        if (getX() != cellule.getX()) return false;
-        return getY() == cellule.getY();
-    }
-
-    public void majDistanceVers(Cellule pere){
-        if(pere.getDistance() + this.getCoutAcces() <= this.getDistance()){
-            this.setDistance(pere.getDistance() + this.getCoutAcces());
-            this.setPere(pere);
-        }
+        if (getX() != that.getX()) return false;
+        return getY() == that.getY();
     }
 
     @Override
@@ -172,31 +196,33 @@ public class Cellule {
         return result;
     }
 
-    /**
-     * Retourne un caractère représentant la case
-     * @return String caractère de la case
-     */
     public String getDessin(){
-        if(estMur){
-            return "███";
-        } else {
-            switch (coutAcces){
-                case 1: // Pierre
-                    return "\u001B[37mp\u001B[0m";
-                case 2: // Sable
-                    return "\u001B[33ms\u001B[0m";
-                case 3: // Eau
-                    return "\u001B[34me\u001B[0m";
-            }
-            return "   ";
+        StringBuilder stringBuilder = new StringBuilder(type.getCouleurTerminal());
+        switch (type){
+            case mur:
+                stringBuilder.append("███");
+                break;
+            case pierre:
+                stringBuilder.append("p");
+                break;
+            case sable:
+                stringBuilder.append("s");
+                break;
+            case eau:
+                stringBuilder.append("e");
+                break;
         }
+        stringBuilder.append("\u001B[0m");
+        return stringBuilder.toString();
     }
 
     @Override
     public String toString() {
-        return "[" + x +
-                "," + y +
-                ']';
+        final StringBuilder sb = new StringBuilder("CelluleType{");
+        sb.append("type=").append(type);
+        sb.append(", x=").append(x);
+        sb.append(", y=").append(y);
+        sb.append('}');
+        return sb.toString();
     }
-
 }
