@@ -21,7 +21,12 @@ public class VueLabyrinthe extends GridPane implements Observer {
     private void refresh(Modele modele){
         assert (modele != null):"Erreur : modele non défini";
         getChildren().clear();
+        afficheLaby(modele);
+        afficheChemin(modele);
+        afficherExploration(modele);
+    }
 
+    private void afficheLaby(Modele modele){
         for(ArrayList<Cellule> col : modele.getCarte()){
             for(Cellule cel : col){
                 VueCellule vueCellule;
@@ -32,14 +37,34 @@ public class VueLabyrinthe extends GridPane implements Observer {
                 } else {
                     vueCellule = new VueCellule(modele, cel);
                 }
-                this.add(vueCellule, cel.getX()+1, cel.getY()+1);
+                add(vueCellule, cel.getX(), cel.getY());
+            }
+        }
+    }
+
+    private void afficheChemin(Modele modele){
+        ArrayList<Cellule> chemin = modele.getChemin();
+        for(Cellule cellule : chemin){
+            add(new VuePas(), cellule.getX(), cellule.getY());
+        }
+    }
+
+    private void afficherExploration(Modele modele){
+        if(modele.getAlgo() != null){
+            ArrayList<Cellule> ouvert = modele.getAlgo().getOuverts();
+            ArrayList<Cellule> ferme = modele.getAlgo().getFermes();
+            for(Cellule cellule : ouvert){
+                add(new VueOuvert(), cellule.getX(), cellule.getY());
+            }
+            for(Cellule cellule : ferme){
+                add(new VueFermee(), cellule.getX(), cellule.getY());
             }
         }
     }
 
     @Override
     public void update(Observable observable, Object o) {
-        Modele monde = (Modele)o;
-        refresh(monde);
+        Modele modele = (Modele)observable;
+        refresh(modele);
     }
 }

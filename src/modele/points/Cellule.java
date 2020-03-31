@@ -170,8 +170,8 @@ public class Cellule {
         int min = Integer.MAX_VALUE - 10;
         Cellule res = null;
         for(Cellule cellule : liste){
-            if(cellule.getCoutAStar() < min){
-                min = cellule.getCoutAStarAmplifie(1);
+            if(cellule.getCoutAStarAmplifie(2) < min){
+                min = cellule.getCoutAStarAmplifie(2);
                 res = cellule;
             }
         }

@@ -1,14 +1,8 @@
 package controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Slider;
 import modele.Modele;
-
-import java.util.Observable;
-import java.util.Observer;
 
 public class LabyrintheModifier {
 
@@ -16,13 +10,7 @@ public class LabyrintheModifier {
     private String algo;
 
     @FXML
-    private ToggleGroup selectAlgo;
-    @FXML
-    private RadioButton aStar;
-    @FXML
-    private RadioButton dijkstra;
-    @FXML
-    private Button resoudre;
+    private Slider speed;
 
     public LabyrintheModifier(Modele modele){
         super();
@@ -31,7 +19,9 @@ public class LabyrintheModifier {
     }
 
     @FXML
-    void initialize(){}
+    void initialize(){
+        setAlgoAStar();
+    }
 
     @FXML
     private void setAlgoAStar() {
@@ -45,6 +35,8 @@ public class LabyrintheModifier {
 
     @FXML
     private void resoudreLaby() {
-        modele.calculChemin(algo);
+        modele.calculChemin(algo, (int)speed.getValue());
     }
+
+
 }

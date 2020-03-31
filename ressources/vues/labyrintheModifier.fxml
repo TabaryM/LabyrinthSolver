@@ -5,13 +5,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" spacing="4.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" spacing="4.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
    <children>
       <BorderPane>
          <top>
             <Label text="Algorithme" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
             </Label>
          </top>
@@ -31,9 +31,15 @@
             <Button fx:id="resoudre" mnemonicParsing="false" onAction="#resoudreLaby" prefHeight="26.0" prefWidth="97.0" text="Résoudre" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
+      <Label text="Vitesse d'affichage">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Slider fx:id="speed" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
    </children>
    <opaqueInsets>
-      <Insets />
+      <Insets top="8.0" />
    </opaqueInsets>
    <padding>
       <Insets left="6.0" top="4.0" />

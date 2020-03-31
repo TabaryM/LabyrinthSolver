@@ -7,6 +7,6 @@ import outils.ImageFactory;
 public class VueCelluleSortie extends VueCellule{
     public VueCelluleSortie(Modele modele, Cellule cellule) {
         super(modele, cellule);
-        super.getChildren().add(ImageFactory.getInstance().getImageViewSortie());
+        this.setGraphic(ImageFactory.getInstance().getImageViewSortie());
     }
 }

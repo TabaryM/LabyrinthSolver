@@ -1,12 +1,13 @@
 package vues;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import modele.Modele;
 import modele.points.Cellule;
 import outils.ImageFactory;
 
-public class VueCellule extends Pane {
+public class VueCellule extends Label {
 
     private ImageView imageView;
 
@@ -29,7 +30,7 @@ public class VueCellule extends Pane {
                 imageView = ImageFactory.getInstance().getImageViewEau();
                 break;
         }
-        this.getChildren().add(imageView);
+        this.setGraphic(imageView);
     }
 
 }
