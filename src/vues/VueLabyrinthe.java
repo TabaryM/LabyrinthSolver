@@ -22,8 +22,8 @@ public class VueLabyrinthe extends GridPane implements Observer {
         assert (modele != null):"Erreur : modele non défini";
         getChildren().clear();
         afficheLaby(modele);
-        afficheChemin(modele);
         afficherExploration(modele);
+        afficheChemin(modele);
     }
 
     private void afficheLaby(Modele modele){

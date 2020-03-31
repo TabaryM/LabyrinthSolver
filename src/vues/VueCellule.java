@@ -1,5 +1,6 @@
 package vues;
 
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -7,14 +8,15 @@ import modele.Modele;
 import modele.points.Cellule;
 import outils.ImageFactory;
 
-public class VueCellule extends Label {
-
-    private ImageView imageView;
+public class VueCellule extends Pane {
 
     public VueCellule(Modele modele, Cellule cellule){
         super();
         assert (modele != null):"Erreur : modele non défini";
         assert (cellule != null):"Erreur : cellule non définie";
+        Label label = new Label();
+        this.getChildren().add(label);
+        ImageView imageView;
         switch (cellule.type){
             case mur:
                 imageView = ImageFactory.getInstance().getImageViewMur();
@@ -30,7 +32,11 @@ public class VueCellule extends Label {
                 imageView = ImageFactory.getInstance().getImageViewEau();
                 break;
         }
-        this.setGraphic(imageView);
+        label.setGraphic(imageView);
+    }
+
+    protected void setFils(Node fils){
+        this.getChildren().add(fils);
     }
 
 }

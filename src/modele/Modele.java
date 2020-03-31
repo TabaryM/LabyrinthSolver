@@ -82,7 +82,7 @@ public class Modele extends Observable {
                 cpt = 1;
                 algo.calculDistances();
                 cheminTmp = algo.getChemin();
-                while (cpt < cheminTmp.size() - 1){
+                while (cpt < cheminTmp.size() - 2){
                     try {
                         Thread.sleep(1000/vitesse);
                     } catch (InterruptedException ex) {
