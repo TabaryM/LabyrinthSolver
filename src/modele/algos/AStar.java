@@ -6,7 +6,6 @@ import modele.points.Cellule;
 import java.util.ArrayList;
 
 public class AStar extends Algo {
-
     public AStar(Carte carte) {
         super(carte);
     }
@@ -42,31 +41,6 @@ public class AStar extends Algo {
                 }
             }
         }
-    }
-
-    /**
-     * Retourne le chemin calculé par l'algorithme A*
-     */
-    @Override
-    public void getChemin(ArrayList<Cellule> chemin) {
-        chemin.add(getCarte().getSortie());
-        Cellule courrant = getCarte().getSortie();
-        while (courrant != null){
-            chemin.add(courrant);
-            courrant = courrant.getPere();
-        }
-    }
-
-    @Override
-    public ArrayList<Cellule> getChemin() {
-        ArrayList<Cellule> chemin = new ArrayList<>();
-        chemin.add(getCarte().getSortie());
-        Cellule courrant = getCarte().getSortie();
-        while (courrant != null){
-            chemin.add(courrant);
-            courrant = courrant.getPere();
-        }
-        return chemin;
     }
 
     public void initCalcul(){
@@ -112,23 +86,5 @@ public class AStar extends Algo {
             }
         }
         return false;
-    }
-
-    /**
-     * Retourne la liste des cellules potentiellement utilisées pour aller vers la sortie
-     * @return this.ouvert
-     */
-    @Override
-    public ArrayList<Cellule> getOuverts() {
-        return ouverts;
-    }
-
-    /**
-     * Retourne la liste des cellules qui ne seront pas utilisées pour aller à la sortie
-     * @return this.fermees
-     */
-    @Override
-    public ArrayList<Cellule> getFermes() {
-        return fermees;
     }
 }

@@ -16,16 +16,22 @@ public class Modele extends Observable {
     private ArrayList<Cellule> chemin;
     private Algo algo;
     private Random random;
+    private long seed;
 
     // Pour l'affichage
     private int cpt;
     private ArrayList<Cellule> cheminTmp;
+    private int vitesse;
 
     public Modele(int nbLignes, int nbColonnes){
         super();
+        Random tmp = new Random();
+        seed = tmp.nextLong();
         random = new Random();
+        random.setSeed(seed);
         carte = new Carte(nbLignes, nbColonnes, random);
         chemin = new ArrayList<>();
+        vitesse = 1;
     }
 
     public void genereLabyrinthe(String methode){
@@ -38,10 +44,6 @@ public class Modele extends Observable {
     }
 
     public void calculChemin(String methode){
-        calculChemin(methode, 1);
-    }
-
-    public void calculChemin(String methode, int vitesse){
         chemin = new ArrayList<>();
         switch (methode){
             case "AStar":
@@ -107,6 +109,19 @@ public class Modele extends Observable {
 
     public Carte getCarte(){
         return carte;
+    }
+
+    public void setVitesse(int vitesse){
+        this.vitesse = vitesse;
+    }
+
+    public void setSeed(long seed){
+        this.seed = seed;
+        random.setSeed(seed);
+    }
+
+    public long getSeed(){
+        return seed;
     }
 
     @Override

@@ -2,41 +2,210 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" spacing="4.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" spacing="16.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
    <children>
       <BorderPane>
          <top>
             <Label text="Algorithme" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
          </top>
          <center>
-            <VBox BorderPane.alignment="CENTER">
+            <VBox spacing="8.0" BorderPane.alignment="CENTER">
                <children>
                   <RadioButton fx:id="aStar" mnemonicParsing="false" onAction="#setAlgoAStar" selected="true" text="A*">
                      <toggleGroup>
                         <ToggleGroup fx:id="selectAlgo" />
                      </toggleGroup>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
                   </RadioButton>
-                  <RadioButton fx:id="dijkstra" mnemonicParsing="false" onAction="#setAlgoDijkstra" text="Dijkstra" toggleGroup="$selectAlgo" />
+                  <RadioButton fx:id="dijkstra" mnemonicParsing="false" onAction="#setAlgoDijkstra" text="Dijkstra" toggleGroup="$selectAlgo">
+                     <font>
+                        <Font size="14.0" />
+                     </font></RadioButton>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <BorderPane.margin>
+                  <Insets left="16.0" />
+               </BorderPane.margin>
+               <padding>
+                  <Insets top="4.0" />
+               </padding>
             </VBox>
          </center>
          <bottom>
             <Button fx:id="resoudre" mnemonicParsing="false" onAction="#resoudreLaby" prefHeight="26.0" prefWidth="97.0" text="Résoudre" BorderPane.alignment="CENTER" />
          </bottom>
+         <VBox.margin>
+            <Insets top="8.0" />
+         </VBox.margin>
       </BorderPane>
-      <Label text="Vitesse d'affichage">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Slider fx:id="speed" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+      <VBox alignment="TOP_CENTER" spacing="8.0">
+         <children>
+            <Label text="Vitesse d'affichage">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Slider fx:id="speed" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="0" onMousePressed="#setVitesse" onMouseReleased="#setVitesse" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0">
+               <padding>
+                  <Insets left="4.0" right="4.0" />
+               </padding></Slider>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER">
+         <children>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/mur.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="mur">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/pierre.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="pierre">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/sable.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="sable">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/eau.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="eau">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/entree.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="entree">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/sortie.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="sortie">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <Pane maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: rgba(255, 50, 50, 0.5);" />
+                  <Label text="fermé">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <Pane maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: rgba(50, 255, 50, 0.5);" />
+                  <Label text="ouvert">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="100.0" spacing="8.0">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/pas.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="chemin">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="8.0" left="4.0" top="8.0" />
+         </padding>
+      </FlowPane>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="8.0">
+         <children>
+            <Label text="Graine aléatoire">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="champsSeed" maxWidth="250.0" minWidth="50.0" prefWidth="150.0" />
+            <Button mnemonicParsing="false" onAction="#genererAvecSeed" text="Générer avec la graine" />
+            <Button mnemonicParsing="false" onAction="#genererAlea" text="Générer aléatoire" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
    </children>
    <opaqueInsets>
       <Insets top="8.0" />

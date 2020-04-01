@@ -19,16 +19,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Modele modele = new Modele(20, 20);
-        modele.genereLabyrinthe("Prim");
         primaryStage.setTitle("Le LABYRINTHE d'ses morts !");
 
         BorderPane root = new BorderPane();
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("vues/legende.fxml"));
-        Pane legende = loader.load();
-
-        loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("vues/labyrintheModifier.fxml"));
         loader.setControllerFactory(iC->new LabyrintheModifier(modele));
         Pane labyrintheModifier = loader.load();
@@ -36,7 +31,6 @@ public class Main extends Application {
         Pane labyrinthe = new VueLabyrinthe(modele);
 
         root.setCenter(labyrinthe);
-        root.setBottom(legende);
         root.setRight(labyrintheModifier);
 
         primaryStage.setScene(new Scene(root, root.getPrefWidth(), root.getPrefHeight()));

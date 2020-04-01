@@ -127,8 +127,8 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         ArrayList<Cellule> visites = new ArrayList<>();
 
         // On choisis un premier point de départ au hasard qui ne sera pas un mur du labyrinthe
-        int randomX = (int) (Math.random() * (nbColonnes));
-        int randomY = (int) (Math.random() * (nbLignes));
+        int randomX = random.nextInt(nbColonnes);
+        int randomY = random.nextInt(nbLignes);
 
         Cellule courrant = carte.get(randomX).get(randomY);
         courrant.setRandomType(random);
@@ -148,7 +148,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         //   On marque la cellule actuelle comme un non mur
         //   On ajoute les voisins de cette cellule à la liste des murs à visiter
         while(!murs.isEmpty()){
-            courrant = murs.get((int) (Math.random()*murs.size()));
+            courrant = murs.get(random.nextInt(murs.size()));
 
             //courrant = murs.get(0);
             murs.remove(courrant);
@@ -174,13 +174,6 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
                     }
                 }
             } else {
-                /*
-                // On transforme 10% des murs à coté des couloirs en couloir
-                if((int) (Math.random()*10) == 1){
-                    carte.get(courrant.getX()).get(courrant.getY()).setEstMur(false);
-                }
-                */
-
                 // Si la cellule est entre deux couloirs on la transforme en couloir
                 cptVoisinsVisites = 0;
                 for (Cellule p : voisins){
@@ -188,7 +181,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
                         cptVoisinsVisites++;
                     }
                 }
-                if(cptVoisinsVisites == 2 && (int) (Math.random()*100) >= 20){
+                if(cptVoisinsVisites == 2 && random.nextInt(100) >= 20){
                     carte.get(courrant.getX()).get(courrant.getY()).setRandomType(random);
                 }
             }
