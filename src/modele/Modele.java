@@ -1,7 +1,6 @@
 package modele;
 
 import javafx.application.Platform;
-import javafx.scene.control.RadioButton;
 import modele.algos.AStar;
 import modele.algos.Algo;
 import modele.algos.Dijkstra;
@@ -32,6 +31,7 @@ public class Modele extends Observable {
         carte = new Carte(nbLignes, nbColonnes, random);
         chemin = new ArrayList<>();
         vitesse = 1;
+        algo = new AStar(carte);
     }
 
     public void genereLabyrinthe(String methode){
@@ -47,10 +47,10 @@ public class Modele extends Observable {
         chemin = new ArrayList<>();
         switch (methode){
             case "AStar":
+            default:
                 algo = new AStar(carte);
                 break;
             case "Dijkstra":
-            default:
                 algo = new Dijkstra(carte);
                 break;
         }
@@ -101,6 +101,19 @@ public class Modele extends Observable {
 
     public ArrayList<Cellule> getChemin(){
         return chemin;
+    }
+
+    public void removeChemin(){
+        chemin.clear();
+        algo.resetOF();
+    }
+
+    public int getCoutChemin(){
+        int res = 0;
+        for(Cellule cellule : chemin){
+            res += cellule.getCoutAcces();
+        }
+        return res;
     }
 
     public Algo getAlgo(){

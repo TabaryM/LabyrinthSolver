@@ -21,6 +21,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
         this.nbColonnes = nbColonnes;
         this.nbLignes = nbLignes;
         this.random = random;
+        carte = new ArrayList<>();
 
         // Initialisation du labyrinthe
         resetCarte();
@@ -32,7 +33,7 @@ public class Carte implements Iterable<ArrayList<Cellule>> {
      */
     private void resetCarte(){
         int coutCellule;
-        carte = new ArrayList<>();
+        carte.clear();
         for(int i = 0; i < nbColonnes; i++){
             carte.add(new ArrayList<>());
             for(int j = 0; j < nbLignes; j++){

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" spacing="16.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" spacing="16.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LabyrintheModifier">
    <children>
       <BorderPane>
          <top>
@@ -61,6 +61,38 @@
                <padding>
                   <Insets left="4.0" right="4.0" />
                </padding></Slider>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="8.0">
+         <children>
+            <Label text="Graine aléatoire">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="champsSeed" maxWidth="250.0" minWidth="50.0" prefWidth="150.0" />
+            <Button mnemonicParsing="false" onAction="#genererAvecSeed" text="Générer avec la graine" />
+            <Button mnemonicParsing="false" onAction="#genererAlea" text="Générer aléatoire" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+      <VBox alignment="TOP_CENTER" layoutX="16.0" layoutY="232.0" spacing="8.0">
+         <children>
+            <Label text="Coût du chemin">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="coutChemin" layoutX="89.0" layoutY="10.0" prefWidth="75.0" textAlignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
          <opaqueInsets>
             <Insets />
@@ -191,26 +223,30 @@
             <Insets bottom="8.0" left="4.0" top="8.0" />
          </padding>
       </FlowPane>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="8.0">
+      <!-->
+      <VBox alignment="TOP_CENTER" layoutX="16.0" layoutY="464.0" prefHeight="75.0" prefWidth="100.0" spacing="8.0">
          <children>
-            <Label text="Graine aléatoire">
+            <Label text="Chat et Souris">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="champsSeed" maxWidth="250.0" minWidth="50.0" prefWidth="150.0" />
-            <Button mnemonicParsing="false" onAction="#genererAvecSeed" text="Générer avec la graine" />
-            <Button mnemonicParsing="false" onAction="#genererAlea" text="Générer aléatoire" />
+            <CheckBox fx:id="checkChatSouris" mnemonicParsing="false" text="Activer">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
          </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
       </VBox>
+      <-->
    </children>
    <opaqueInsets>
       <Insets top="8.0" />
    </opaqueInsets>
    <padding>
-      <Insets left="6.0" top="4.0" />
+      <Insets bottom="16.0" left="6.0" top="4.0" />
    </padding>
 </VBox>

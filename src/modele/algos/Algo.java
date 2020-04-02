@@ -12,6 +12,8 @@ public abstract class Algo {
 
     public Algo(Carte carte){
         this.carte = carte;
+        ouverts = new ArrayList<>();
+        fermees = new ArrayList<>();
     }
 
     public abstract void calculDistances();
@@ -49,5 +51,10 @@ public abstract class Algo {
 
     public Carte getCarte(){
         return carte;
+    }
+
+    public void resetOF(){
+        ouverts.clear();
+        fermees.clear();
     }
 }

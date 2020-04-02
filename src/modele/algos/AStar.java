@@ -52,8 +52,7 @@ public class AStar extends Algo {
             heuristique = getCarte().calculeHeuristique(cellule);
             cellule.setDistanceEuclidienne(heuristique);
         }
-        ouverts = new ArrayList<>();
-        fermees = new ArrayList<>();
+        resetOF();
 
         ouverts.add(getCarte().getEntree());
     }

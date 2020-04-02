@@ -45,8 +45,7 @@ public class Dijkstra extends Algo {
 
     @Override
     public void initCalcul() {
-        fermees = new ArrayList<>();
-        ouverts = new ArrayList<>();
+        resetOF();
         ouverts.add(getCarte().getEntree());
     }
 
